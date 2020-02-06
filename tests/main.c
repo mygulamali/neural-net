@@ -2,7 +2,8 @@
 
 int main(void) {
     const struct CMUnitTest tests[] = {
-        cmocka_unit_test(test_sigmoid)
+        cmocka_unit_test(test_sigmoid),
+        cmocka_unit_test(test_sigmoid_prime)
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);
