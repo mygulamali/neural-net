@@ -5,7 +5,8 @@ int main(void) {
         cmocka_unit_test(test_sigmoid),
         cmocka_unit_test(test_sigmoid_prime),
 	cmocka_unit_test(test_ones_v),
-        cmocka_unit_test(test_sigmoid_v)
+        cmocka_unit_test(test_sigmoid_v),
+        cmocka_unit_test(test_sigmoid_prime_v)
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

@@ -34,3 +34,14 @@ gsl_vector * sigmoid_v(const gsl_vector *x) {
     gsl_vector_free(denom);
     return nom;
 }
+
+gsl_vector * sigmoid_prime_v(const gsl_vector *x) {
+    gsl_vector *sigma = sigmoid_v(x);
+    gsl_vector *result = ones_v(x->size);
+
+    gsl_vector_sub(result, sigma);
+    gsl_vector_mul(result, sigma);
+
+    gsl_vector_free(sigma);
+    return result;
+}
