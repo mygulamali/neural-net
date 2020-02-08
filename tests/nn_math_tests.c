@@ -47,3 +47,29 @@ void test_ones_v(void **state) {
     gsl_vector_free(ones);
     (void) state;
 }
+
+void test_sigmoid_v(void **state) {
+    /* Values rounded to 16-dp according to Wolfram Alpha */
+    double xs[5][2] = {
+	{-INFINITY, 0.0},
+	{     -1.0, 0.2689414213699951},
+	{      0.0, 0.5},
+	{      1.0, 0.7310585786300049},
+	{ INFINITY, 1.0}
+    };
+
+    gsl_vector *x = gsl_vector_alloc(5);
+    gsl_vector *expected_y = gsl_vector_alloc(5);
+    for (intmax_t i = 0; i < 5; i++) {
+	gsl_vector_set(x, i, xs[i][0]);
+	gsl_vector_set(expected_y, i, xs[i][1]);
+    }
+
+    gsl_vector *y = sigmoid_v(x);
+    assert_gsl_vector_equal(y, expected_y, EPSILON);
+
+    gsl_vector_free(y);
+    gsl_vector_free(expected_y);
+    gsl_vector_free(x);
+    (void) state;
+}
