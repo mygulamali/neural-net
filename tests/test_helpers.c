@@ -36,16 +36,51 @@ static int double_values_not_equal_display_error(const double left,
     return not_equal;
 }
 
-void _assert_double_equal(const double a, const double b, const double eps,
-                          const char* const file, const int line) {
+/* Returns 1 if the specified values are equal within tolerance. If the values
+ * are not equal, an error is displayed and 0 is returned. */
+static int gsl_vector_values_equal_display_error(const gsl_vector *left,
+						 const gsl_vector *right,
+						 const double tolerance) {
+    for (size_t i = 0; i < left->size; i++) {
+	const double left_i = gsl_vector_get(left, i);
+	const double right_i = gsl_vector_get(right, i);
+
+	const int equal = fabs(left_i - right_i) < tolerance;
+
+        if (!equal) {
+	    cm_print_error(
+		"%f != %f ± %f at index %lo\n", left_i, right_i, tolerance, i
+	    );
+	    return equal;
+	}
+    }
+
+    return 1;
+}
+
+void _assert_double_equal(
+    const double a, const double b, const double eps,
+    const char* const file, const int line
+) {
     if (!double_values_equal_display_error(a, b, eps)) {
         _fail(file, line);
     }
 }
 
-void _assert_double_not_equal(const double a, const double b, const double eps,
-                              const char* const file, const int line) {
+void _assert_double_not_equal(
+    const double a, const double b, const double eps,
+    const char* const file, const int line
+) {
     if (!double_values_not_equal_display_error(a, b, eps)) {
         _fail(file, line);
+    }
+}
+
+void _assert_gsl_vector_equal(
+    const gsl_vector *a, const gsl_vector *b, const double eps,
+    const char* const file, const int line
+) {
+    if (!gsl_vector_values_equal_display_error(a, b, eps)) {
+	_fail(file, line);
     }
 }
