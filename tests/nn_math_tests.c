@@ -35,3 +35,15 @@ void test_sigmoid_prime(void **state) {
 
     (void) state;
 }
+
+void test_ones_v(void **state) {
+    gsl_vector * ones = ones_v(5);
+
+    for (size_t i = 0; i < 5; i++) {
+	const double one = gsl_vector_get(ones, i);
+	assert_int_equal(one, 1.0);
+    }
+
+    gsl_vector_free(ones);
+    (void) state;
+}

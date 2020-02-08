@@ -6,7 +6,7 @@ BUILD_DIR = ${PWD}/build
 LIB_DIR = ${PWD}/lib
 
 CFLAGS += -O2 -g -Wall -Wextra -Wpedantic -std=c11 -march=native
-LDFLAGS += -lm
+LDFLAGS += -lgsl -lgslcblas -lm
 
 SOURCES = ${SRC_DIR}/nn_math.c
 

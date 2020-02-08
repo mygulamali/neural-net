@@ -1,11 +1,13 @@
 #pragma once
 
-#include <stdint.h>
+#include <math.h>
+#include <setjmp.h>
 #include <stdarg.h>
 #include <stddef.h>
-#include <setjmp.h>
-#include <math.h>
+#include <stdint.h>
+
 #include <cmocka.h>
+#include <gsl/gsl_vector.h>
 
 /* A very small number */
 #define EPSILON 1.0e-16
