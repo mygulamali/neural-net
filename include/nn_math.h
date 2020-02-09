@@ -5,9 +5,9 @@
 
 #include <gsl/gsl_vector.h>
 
-double sigmoid(const double x);
-double sigmoid_prime(const double x);
+double nn_sigmoid(const double x);
+double nn_sigmoid_prime(const double x);
 
-gsl_vector * ones_v(const size_t n);
-gsl_vector * sigmoid_v(const gsl_vector *x);
-gsl_vector * sigmoid_prime_v(const gsl_vector *x);
+gsl_vector * nn_ones_v(const size_t n);
+gsl_vector * nn_sigmoid_v(const gsl_vector *x);
+gsl_vector * nn_sigmoid_prime_v(const gsl_vector *x);

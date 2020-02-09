@@ -1,6 +1,6 @@
 #include "nn_math_tests.h"
 
-void test_sigmoid(void **state) {
+void test_nn_sigmoid(void **state) {
     /* Values rounded to 16-dp according to Wolfram Alpha */
     double xs[5][2] = {
 	{-INFINITY, 0.0},
@@ -11,14 +11,14 @@ void test_sigmoid(void **state) {
     };
 
     for (uintmax_t i = 0; i < 5; i++) {
-	const double y = sigmoid(xs[i][0]);
+	const double y = nn_sigmoid(xs[i][0]);
 	assert_double_equal(y, xs[i][1], EPSILON);
     }
 
     (void) state;
 }
 
-void test_sigmoid_prime(void **state) {
+void test_nn_sigmoid_prime(void **state) {
     /* Values rounded to 16-dp according to Wolfram Alpha */
     double xs[5][2] = {
 	{-INFINITY, 0.0},
@@ -29,15 +29,15 @@ void test_sigmoid_prime(void **state) {
     };
 
     for (uintmax_t i = 0; i < 5; i++) {
-	const double y = sigmoid_prime(xs[i][0]);
+	const double y = nn_sigmoid_prime(xs[i][0]);
 	assert_double_equal(y, xs[i][1], EPSILON);
     }
 
     (void) state;
 }
 
-void test_ones_v(void **state) {
-    gsl_vector * ones = ones_v(5);
+void test_nn_ones_v(void **state) {
+    gsl_vector * ones = nn_ones_v(5);
 
     for (size_t i = 0; i < 5; i++) {
 	const double one = gsl_vector_get(ones, i);
@@ -48,7 +48,7 @@ void test_ones_v(void **state) {
     (void) state;
 }
 
-void test_sigmoid_v(void **state) {
+void test_nn_sigmoid_v(void **state) {
     /* Values rounded to 16-dp according to Wolfram Alpha */
     double xs[5][2] = {
 	{-INFINITY, 0.0},
@@ -65,7 +65,7 @@ void test_sigmoid_v(void **state) {
 	gsl_vector_set(expected_y, i, xs[i][1]);
     }
 
-    gsl_vector *y = sigmoid_v(x);
+    gsl_vector *y = nn_sigmoid_v(x);
     assert_gsl_vector_equal(y, expected_y, EPSILON);
 
     gsl_vector_free(y);
@@ -74,7 +74,7 @@ void test_sigmoid_v(void **state) {
     (void) state;
 }
 
-void test_sigmoid_prime_v(void **state) {
+void test_nn_sigmoid_prime_v(void **state) {
     /* Values rounded to 16-dp according to Wolfram Alpha */
     double xs[5][2] = {
 	{-INFINITY, 0.0},
@@ -91,7 +91,7 @@ void test_sigmoid_prime_v(void **state) {
 	gsl_vector_set(expected_y, i, xs[i][1]);
     }
 
-    gsl_vector *y = sigmoid_prime_v(x);
+    gsl_vector *y = nn_sigmoid_prime_v(x);
     assert_gsl_vector_equal(y, expected_y, EPSILON);
 
     gsl_vector_free(y);
