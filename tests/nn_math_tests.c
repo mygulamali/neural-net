@@ -99,3 +99,17 @@ void test_nn_sigmoid_prime_v(void **state) {
     gsl_vector_free(x);
     (void) state;
 }
+
+void test_nn_ones_m(void **state) {
+    gsl_matrix * ones = nn_ones_m(3, 2);
+
+    for (size_t i = 0; i < 3; i++) {
+	for (size_t j = 0; j < 2; j++) {
+	    const double one = gsl_matrix_get(ones, i, j);
+	    assert_int_equal(one, 1.0);
+	}
+    }
+
+    gsl_matrix_free(ones);
+    (void) state;
+}

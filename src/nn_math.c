@@ -45,3 +45,9 @@ gsl_vector * nn_sigmoid_prime_v(const gsl_vector *x) {
     gsl_vector_free(sigma);
     return result;
 }
+
+gsl_matrix * nn_ones_m(const size_t n, const size_t m) {
+    gsl_matrix *ones = gsl_matrix_alloc(n, m);
+    gsl_matrix_set_all(ones, 1.0);
+    return ones;
+}
