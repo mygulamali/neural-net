@@ -58,6 +58,31 @@ static int gsl_vector_values_equal_display_error(const gsl_vector *left,
     return 1;
 }
 
+/* Returns 1 if the specified values are equal within tolerance. If the values
+ * are not equal, an error is displayed and 0 is returned. */
+static int gsl_matrix_values_equal_display_error(const gsl_matrix *left,
+						 const gsl_matrix *right,
+						 const double tolerance) {
+    for (size_t i = 0; i < left->size1; i++) {
+	for (size_t j = 0; j < left->size2; j++) {
+	    const double left_ij = gsl_matrix_get(left, i, j);
+	    const double right_ij = gsl_matrix_get(right, i, j);
+
+	    const int equal = fabs(left_ij - right_ij) < tolerance;
+
+	    if (!equal) {
+		cm_print_error(
+		    "%f != %f ± %f at index (%lo, %lo)\n",
+		    left_ij, right_ij, tolerance, i, j
+		);
+		return equal;
+	    }
+	}
+    }
+
+    return 1;
+}
+
 void _assert_double_equal(
     const double a, const double b, const double eps,
     const char* const file, const int line
@@ -81,6 +106,15 @@ void _assert_gsl_vector_equal(
     const char* const file, const int line
 ) {
     if (!gsl_vector_values_equal_display_error(a, b, eps)) {
+	_fail(file, line);
+    }
+}
+
+void _assert_gsl_matrix_equal(
+    const gsl_matrix *a, const gsl_matrix *b, const double eps,
+    const char* const file, const int line
+) {
+    if (!gsl_matrix_values_equal_display_error(a, b, eps)) {
 	_fail(file, line);
     }
 }
