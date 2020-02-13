@@ -51,3 +51,25 @@ gsl_matrix * nn_ones_m(const size_t n, const size_t m) {
     gsl_matrix_set_all(ones, 1.0);
     return ones;
 }
+
+gsl_matrix * nn_sigmoid_m(const gsl_matrix *x) {
+    gsl_matrix *denom = gsl_matrix_alloc(x->size1, x->size2);
+
+    gsl_matrix_memcpy(denom, x);
+    gsl_matrix_scale(denom, -1.0);
+
+    for (size_t i = 0; i < denom->size1; i++) {
+	for (size_t j = 0; j < denom->size2; j++) {
+	    const double denom_ij = gsl_matrix_get(denom, i, j);
+	    gsl_matrix_set(denom, i, j, exp(denom_ij));
+	}
+    }
+
+    gsl_matrix_add_constant(denom, 1.0);
+
+    gsl_matrix *nom = nn_ones_m(x->size1, x->size2);
+    gsl_matrix_div_elements(nom, denom);
+
+    gsl_matrix_free(denom);
+    return nom;
+}
