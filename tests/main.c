@@ -8,7 +8,8 @@ int main(void) {
         cmocka_unit_test(test_nn_sigmoid_v),
         cmocka_unit_test(test_nn_sigmoid_prime_v),
 	cmocka_unit_test(test_nn_ones_m),
-        cmocka_unit_test(test_nn_sigmoid_m)
+        cmocka_unit_test(test_nn_sigmoid_m),
+        cmocka_unit_test(test_nn_sigmoid_prime_m),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

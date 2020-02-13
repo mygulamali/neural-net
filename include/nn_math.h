@@ -15,3 +15,4 @@ gsl_vector * nn_sigmoid_prime_v(const gsl_vector *x);
 
 gsl_matrix * nn_ones_m(const size_t n, const size_t m);
 gsl_matrix * nn_sigmoid_m(const gsl_matrix *x);
+gsl_matrix * nn_sigmoid_prime_m(const gsl_matrix *x);

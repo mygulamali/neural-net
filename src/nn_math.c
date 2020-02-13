@@ -73,3 +73,14 @@ gsl_matrix * nn_sigmoid_m(const gsl_matrix *x) {
     gsl_matrix_free(denom);
     return nom;
 }
+
+gsl_matrix * nn_sigmoid_prime_m(const gsl_matrix *x) {
+    gsl_matrix *sigma = nn_sigmoid_m(x);
+    gsl_matrix *result = nn_ones_m(x->size1, x->size2);
+
+    gsl_matrix_sub(result, sigma);
+    gsl_matrix_mul_elements(result, sigma);
+
+    gsl_matrix_free(sigma);
+    return result;
+}

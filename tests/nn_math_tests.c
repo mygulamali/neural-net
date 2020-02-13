@@ -94,3 +94,20 @@ void test_nn_sigmoid_m(void **state) {
     gsl_matrix_free(x);
     (void) state;
 }
+
+void test_nn_sigmoid_prime_m(void **state) {
+    gsl_matrix *x = gsl_matrix_alloc(5, 1);
+    gsl_matrix *expected_y = gsl_matrix_alloc(5, 1);
+    for (intmax_t i = 0; i < 5; i++) {
+	gsl_matrix_set(x, i, 0, SIGMOID_PRIME[i][0]);
+	gsl_matrix_set(expected_y, i, 0, SIGMOID_PRIME[i][1]);
+    }
+
+    gsl_matrix *y = nn_sigmoid_prime_m(x);
+    assert_gsl_matrix_equal(y, expected_y, EPSILON);
+
+    gsl_matrix_free(y);
+    gsl_matrix_free(expected_y);
+    gsl_matrix_free(x);
+    (void) state;
+}
