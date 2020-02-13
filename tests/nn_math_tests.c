@@ -1,36 +1,18 @@
 #include "nn_math_tests.h"
 
 void test_nn_sigmoid(void **state) {
-    /* Values rounded to 16-dp according to Wolfram Alpha */
-    double xs[5][2] = {
-	{-INFINITY, 0.0},
-	{     -1.0, 0.2689414213699951},
-	{      0.0, 0.5},
-	{      1.0, 0.7310585786300049},
-	{ INFINITY, 1.0}
-    };
-
     for (uintmax_t i = 0; i < 5; i++) {
-	const double y = nn_sigmoid(xs[i][0]);
-	assert_double_equal(y, xs[i][1], EPSILON);
+	const double y = nn_sigmoid(SIGMOID[i][0]);
+	assert_double_equal(y, SIGMOID[i][1], EPSILON);
     }
 
     (void) state;
 }
 
 void test_nn_sigmoid_prime(void **state) {
-    /* Values rounded to 16-dp according to Wolfram Alpha */
-    double xs[5][2] = {
-	{-INFINITY, 0.0},
-	{     -1.0, 0.1966119332414819},
-	{      0.0, 0.25},
-	{      1.0, 0.1966119332414819},
-	{ INFINITY, 0.0}
-    };
-
     for (uintmax_t i = 0; i < 5; i++) {
-	const double y = nn_sigmoid_prime(xs[i][0]);
-	assert_double_equal(y, xs[i][1], EPSILON);
+	const double y = nn_sigmoid_prime(SIGMOID_PRIME[i][0]);
+	assert_double_equal(y, SIGMOID_PRIME[i][1], EPSILON);
     }
 
     (void) state;
@@ -49,20 +31,11 @@ void test_nn_ones_v(void **state) {
 }
 
 void test_nn_sigmoid_v(void **state) {
-    /* Values rounded to 16-dp according to Wolfram Alpha */
-    double xs[5][2] = {
-	{-INFINITY, 0.0},
-	{     -1.0, 0.2689414213699951},
-	{      0.0, 0.5},
-	{      1.0, 0.7310585786300049},
-	{ INFINITY, 1.0}
-    };
-
     gsl_vector *x = gsl_vector_alloc(5);
     gsl_vector *expected_y = gsl_vector_alloc(5);
     for (intmax_t i = 0; i < 5; i++) {
-	gsl_vector_set(x, i, xs[i][0]);
-	gsl_vector_set(expected_y, i, xs[i][1]);
+	gsl_vector_set(x, i, SIGMOID[i][0]);
+	gsl_vector_set(expected_y, i, SIGMOID[i][1]);
     }
 
     gsl_vector *y = nn_sigmoid_v(x);
@@ -75,20 +48,11 @@ void test_nn_sigmoid_v(void **state) {
 }
 
 void test_nn_sigmoid_prime_v(void **state) {
-    /* Values rounded to 16-dp according to Wolfram Alpha */
-    double xs[5][2] = {
-	{-INFINITY, 0.0},
-	{     -1.0, 0.1966119332414819},
-	{      0.0, 0.25},
-	{      1.0, 0.1966119332414819},
-	{ INFINITY, 0.0}
-    };
-
     gsl_vector *x = gsl_vector_alloc(5);
     gsl_vector *expected_y = gsl_vector_alloc(5);
     for (intmax_t i = 0; i < 5; i++) {
-	gsl_vector_set(x, i, xs[i][0]);
-	gsl_vector_set(expected_y, i, xs[i][1]);
+	gsl_vector_set(x, i, SIGMOID_PRIME[i][0]);
+	gsl_vector_set(expected_y, i, SIGMOID_PRIME[i][1]);
     }
 
     gsl_vector *y = nn_sigmoid_prime_v(x);
