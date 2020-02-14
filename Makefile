@@ -8,7 +8,8 @@ LIB_DIR = ${PWD}/lib
 CFLAGS += -O2 -g -Wall -Wextra -Wpedantic -std=c11 -march=native
 LDFLAGS += -lgsl -lgslcblas -lm
 
-SOURCES = ${SRC_DIR}/nn_math.c
+SOURCES = ${SRC_DIR}/nn_math.c \
+          ${SRC_DIR}/nn_network.c
 
 TEST_DIR = ${PWD}/tests
 
@@ -17,6 +18,7 @@ TEST_LDFLAGS = -L${LIB_DIR} ${LDFLAGS} -lcmocka -lnn
 
 TEST_SOURCES = ${TEST_DIR}/test_helpers.c \
                ${TEST_DIR}/nn_math_tests.c \
+               ${TEST_DIR}/nn_network_tests.c \
                ${TEST_DIR}/main.c
 
 .SUFFIXES:
