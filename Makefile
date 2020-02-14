@@ -16,8 +16,8 @@ TEST_DIR = ${PWD}/tests
 TEST_CFLAGS = -I${INCLUDE_DIR} -Werror -Wshadow
 TEST_LDFLAGS = -L${LIB_DIR} ${LDFLAGS} -lcmocka -lnn
 
-TEST_SOURCES = ${TEST_DIR}/test_helpers.c \
-               ${TEST_DIR}/nn_math_tests.c \
+TEST_SOURCES = ${TEST_DIR}/test_helpers.c     \
+               ${TEST_DIR}/nn_math_tests.c    \
                ${TEST_DIR}/nn_network_tests.c \
                ${TEST_DIR}/main.c
 
@@ -41,6 +41,13 @@ tests: clean libnn.a
 	mkdir -p ${BUILD_DIR}
 	${CC} ${TEST_SOURCES} ${TEST_CFLAGS} ${TEST_LDFLAGS} -o ${BUILD_DIR}/$@
 	${BUILD_DIR}/$@
+
+mem_tests: tests
+	valgrind                \
+	  --error-exitcode=1    \
+	  --leak-check=full     \
+	  --show-leak-kinds=all \
+	  ${BUILD_DIR}/tests
 
 .PHONY: clean
 clean:
