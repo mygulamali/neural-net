@@ -1,10 +1,12 @@
 #include "nn_network_tests.h"
 
-void test_nn_network_create(void **state) {
+void test_nn_network_create_destroy(void **state) {
     const uintmax_t layers[] = {4, 3, 2};
     const size_t n = sizeof(layers) / sizeof(layers[0]);
 
     nn_network *network = nn_network_create(n, layers);
+
+    assert_int_equal(network->size, n);
 
     for (size_t i = 0; i < n; i++)
 	assert_int_equal(network->layers[i], layers[i]);
@@ -34,6 +36,8 @@ void test_nn_network_create(void **state) {
 		    EPSILON
 		);
     }
+
+    nn_network_destroy(network);
 
     (void) state;
 }
