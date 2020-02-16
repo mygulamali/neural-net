@@ -35,3 +35,10 @@ void nn_network_destroy(nn_network *network) {
     free(network->biases);
     free(network->weights);
 }
+
+void nn_network_set_biases(nn_network *network, gsl_matrix **biases) {
+    const size_t n = network->size;
+
+    for (size_t i = 0; i < n - 1; i++)
+	gsl_matrix_memcpy(network->biases[i], biases[i]);
+}
