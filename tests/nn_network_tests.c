@@ -36,28 +36,33 @@ void test_nn_network_create_destroy(void **state) {
     (void) state;
 }
 
-void test_nn_network_set_biases(void **state) {
+void test_nn_network_set_get_biases(void **state) {
     const uintmax_t layers[] = {4, 3, 2};
     const size_t n = sizeof(layers) / sizeof(layers[0]);
     const size_t sizeof_matrix = nn_utils_sizeof_gsl_matrix();
     nn_network *network = nn_network_create(n, layers);
 
-    gsl_matrix **biases = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
+    gsl_matrix **old_biases = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
+    gsl_matrix **new_biases = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
 
     for (size_t i = 0; i < n - 1; i++) {
-    	biases[i] = gsl_matrix_calloc(layers[i + 1], 1);
-    	for (size_t j = 0; j < biases[i]->size1; j++)
-    	    gsl_matrix_set(biases[i], j, 0, (1.0 + i) * (1.0 + j));
+    	old_biases[i] = gsl_matrix_calloc(layers[i + 1], 1);
+    	for (size_t j = 0; j < old_biases[i]->size1; j++)
+    	    gsl_matrix_set(old_biases[i], j, 0, (1.0 + i) * (1.0 + j));
     }
 
-    nn_network_set_biases(network, biases);
+    nn_network_set_biases(network, old_biases);
+    nn_network_get_biases(network, new_biases);
 
     for (size_t i = 0; i < n - 1; i++)
-	assert_gsl_matrix_equal(network->biases[i], biases[i], EPSILON);
+	assert_gsl_matrix_equal(old_biases[i], new_biases[i], EPSILON);
 
-    for (size_t i = 0; i < n - 1; i++)
-	gsl_matrix_free(biases[i]);
-    free(biases);
+    for (size_t i = 0; i < n - 1; i++) {
+	gsl_matrix_free(old_biases[i]);
+	gsl_matrix_free(new_biases[i]);
+    }
+    free(old_biases);
+    free(new_biases);
     nn_network_destroy(network);
 
     (void) state;

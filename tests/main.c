@@ -12,7 +12,7 @@ int main(void) {
         cmocka_unit_test(test_nn_sigmoid_m),
         cmocka_unit_test(test_nn_sigmoid_prime_m),
         cmocka_unit_test(test_nn_network_create_destroy),
-        cmocka_unit_test(test_nn_network_set_biases),
+        cmocka_unit_test(test_nn_network_set_get_biases),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

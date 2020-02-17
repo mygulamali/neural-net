@@ -40,3 +40,12 @@ void nn_network_set_biases(nn_network *network, gsl_matrix **biases) {
     for (size_t i = 0; i < n - 1; i++)
 	gsl_matrix_memcpy(network->biases[i], biases[i]);
 }
+
+void nn_network_get_biases(nn_network *network, gsl_matrix **biases) {
+    const size_t n = network->size;
+
+    for (size_t i = 0; i < n - 1; i++) {
+	biases[i] = gsl_matrix_alloc(network->biases[i]->size1, 1);
+	gsl_matrix_memcpy(biases[i], network->biases[i]);
+    }
+}
