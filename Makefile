@@ -9,7 +9,8 @@ CFLAGS += -O2 -g -Wall -Wextra -Wpedantic -std=c11 -march=native
 LDFLAGS += -lgsl -lgslcblas -lm
 
 SOURCES = ${SRC_DIR}/nn_math.c \
-          ${SRC_DIR}/nn_network.c
+          ${SRC_DIR}/nn_network.c \
+          ${SRC_DIR}/nn_utils.c
 
 TEST_DIR = ${PWD}/tests
 

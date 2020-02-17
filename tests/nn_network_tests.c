@@ -39,11 +39,10 @@ void test_nn_network_create_destroy(void **state) {
 void test_nn_network_set_biases(void **state) {
     const uintmax_t layers[] = {4, 3, 2};
     const size_t n = sizeof(layers) / sizeof(layers[0]);
+    const size_t sizeof_matrix = nn_utils_sizeof_gsl_matrix();
     nn_network *network = nn_network_create(n, layers);
 
-    gsl_matrix *tmp = gsl_matrix_alloc(0, 0);
-    gsl_matrix **biases = (gsl_matrix **) malloc((n - 1) * sizeof(*tmp));
-    gsl_matrix_free(tmp);
+    gsl_matrix **biases = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
 
     for (size_t i = 0; i < n - 1; i++) {
     	biases[i] = gsl_matrix_calloc(layers[i + 1], 1);

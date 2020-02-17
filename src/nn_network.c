@@ -1,9 +1,8 @@
-#include <stdio.h>
 #include "nn_network.h"
 
 nn_network * nn_network_create(const size_t n, const uintmax_t *layers) {
     static nn_network network;
-    gsl_matrix *matrix = gsl_matrix_alloc(0, 0);
+    const size_t sizeof_matrix = nn_utils_sizeof_gsl_matrix();
 
     network.size = n;
 
@@ -11,8 +10,8 @@ nn_network * nn_network_create(const size_t n, const uintmax_t *layers) {
     for (size_t i = 0; i < n; i++)
 	network.layers[i] = layers[i];
 
-    network.biases = (gsl_matrix **) malloc((n - 1) * sizeof(*matrix));
-    network.weights = (gsl_matrix **) malloc((n - 1) * sizeof(*matrix));
+    network.biases = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
+    network.weights = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
     for (size_t i = 0; i < n - 1; i++) {
 	const uintmax_t layer_i = layers[i];
 	const uintmax_t layer_ip = layers[i + 1];
@@ -21,7 +20,6 @@ nn_network * nn_network_create(const size_t n, const uintmax_t *layers) {
 	network.weights[i] = gsl_matrix_calloc(layer_ip, layer_i);
     }
 
-    gsl_matrix_free(matrix);
     return &network;
 }
 

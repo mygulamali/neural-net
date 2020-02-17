@@ -4,6 +4,8 @@
 
 #include <gsl/gsl_matrix.h>
 
+#include "nn_utils.h"
+
 typedef struct {
     size_t size;
     uintmax_t *layers;
