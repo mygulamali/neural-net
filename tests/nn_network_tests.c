@@ -67,3 +67,38 @@ void test_nn_network_set_get_biases(void **state) {
 
     (void) state;
 }
+
+void test_nn_network_set_get_weights(void **state) {
+    const uintmax_t layers[] = {4, 3, 2};
+    const size_t n = sizeof(layers) / sizeof(layers[0]);
+    const size_t sizeof_matrix = nn_utils_sizeof_gsl_matrix();
+    nn_network *network = nn_network_create(n, layers);
+
+    gsl_matrix **old_weights = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
+    gsl_matrix **new_weights = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
+
+    for (size_t i = 0; i < n - 1; i++) {
+	const uintmax_t layer_i = layers[i];
+	const uintmax_t layer_ip = layers[i + 1];
+
+	old_weights[i] = gsl_matrix_calloc(layer_ip, layer_i);
+    	for (size_t j = 0; j < old_weights[i]->size1; j++)
+	    for (size_t k = 0; k < old_weights[i]->size2; k++)
+		gsl_matrix_set(old_weights[i], j, k, (1.0 + j) * (1.0 + k));
+    }
+
+    nn_network_set_weights(network, old_weights);
+    nn_network_get_weights(network, new_weights);
+
+    for (size_t i = 0; i < n - 1; i++)
+	assert_gsl_matrix_equal(old_weights[i], new_weights[i], EPSILON);
+
+    for (size_t i = 0; i < n - 1; i++) {
+	gsl_matrix_free(old_weights[i]);
+	gsl_matrix_free(new_weights[i]);
+    }
+    free(old_weights);
+    free(new_weights);
+    nn_network_destroy(network);
+    (void) state;
+}

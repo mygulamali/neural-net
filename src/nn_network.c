@@ -49,3 +49,22 @@ void nn_network_get_biases(nn_network *network, gsl_matrix **biases) {
 	gsl_matrix_memcpy(biases[i], network->biases[i]);
     }
 }
+
+void nn_network_set_weights(nn_network *network, gsl_matrix **weights) {
+    const size_t n = network->size;
+
+    for (size_t i = 0; i < n - 1; i++)
+	gsl_matrix_memcpy(network->weights[i], weights[i]);
+}
+
+void nn_network_get_weights(nn_network *network, gsl_matrix **weights) {
+    const size_t n = network->size;
+
+    for (size_t i = 0; i < n - 1; i++) {
+	weights[i] = gsl_matrix_alloc(
+	    network->weights[i]->size1,
+	    network->weights[i]->size2
+	);
+	gsl_matrix_memcpy(weights[i], network->weights[i]);
+    }
+}
