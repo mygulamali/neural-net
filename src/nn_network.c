@@ -69,3 +69,33 @@ void nn_network_get_weights(nn_network *network, gsl_matrix **weights) {
 	gsl_matrix_memcpy(weights[i], network->weights[i]);
     }
 }
+
+gsl_vector * nn_network_ff(nn_network *network, gsl_vector *x) {
+    const size_t n = network->size;
+    gsl_vector *x_tmp;
+    gsl_vector *y_tmp;
+
+    x_tmp = gsl_vector_alloc(x->size);
+    gsl_vector_memcpy(x_tmp, x);
+    for (size_t i = 0; i < n - 1; i++) {
+	y_tmp = gsl_vector_alloc(network->biases[i]->size);
+	gsl_vector_memcpy(y_tmp, network->biases[i]);
+
+	gsl_blas_dgemv(
+	    CblasNoTrans,
+	    1.0, network->weights[i], x_tmp,
+	    1.0, y_tmp
+	);
+
+	gsl_vector_free(x_tmp);
+	x_tmp = nn_sigmoid_v(y_tmp);
+	gsl_vector_free(y_tmp);
+    }
+
+    static gsl_vector *y;
+    y = gsl_vector_alloc(x_tmp->size);
+    gsl_vector_memcpy(y, x_tmp);
+    gsl_vector_free(x_tmp);
+
+    return y;
+}

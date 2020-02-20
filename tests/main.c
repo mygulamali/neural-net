@@ -14,6 +14,7 @@ int main(void) {
         cmocka_unit_test(test_nn_network_create_destroy),
         cmocka_unit_test(test_nn_network_set_get_biases),
         cmocka_unit_test(test_nn_network_set_get_weights),
+        cmocka_unit_test(test_nn_network_ff),
     };
 
     return cmocka_run_group_tests(tests, NULL, NULL);

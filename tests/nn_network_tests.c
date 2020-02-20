@@ -102,3 +102,56 @@ void test_nn_network_set_get_weights(void **state) {
     nn_network_destroy(network);
     (void) state;
 }
+
+void test_nn_network_ff(void **state) {
+    const uintmax_t layers[] = {3, 2, 1};
+    const size_t n = sizeof(layers) / sizeof(layers[0]);
+    const size_t sizeof_matrix = nn_utils_sizeof_gsl_matrix();
+    const size_t sizeof_vector = nn_utils_sizeof_gsl_vector();
+    nn_network *network = nn_network_create(n, layers);
+
+    gsl_vector **biases = (gsl_vector **) malloc((n - 1) * sizeof_vector);
+    gsl_matrix **weights = (gsl_matrix **) malloc((n - 1) * sizeof_matrix);
+
+    double weight = 0.0;
+    for (size_t i = 0; i < n - 1; i++) {
+	const uintmax_t layer_i = layers[i];
+	const uintmax_t layer_ip = layers[i + 1];
+
+    	biases[i] = gsl_vector_alloc(layer_ip);
+	gsl_vector_set_all(biases[i], 0.1);
+
+	weights[i] = gsl_matrix_alloc(layer_ip, layer_i);
+    	for (size_t j = 0; j < weights[i]->size1; j++)
+	    for (size_t k = 0; k < weights[i]->size2; k++) {
+		weight += 0.1;
+		gsl_matrix_set(weights[i], j, k, weight);
+	    }
+    }
+
+    nn_network_set_biases(network, biases);
+    nn_network_set_weights(network, weights);
+
+    gsl_vector *x = nn_ones_v(layers[0]);
+
+    gsl_vector *expected_y = gsl_vector_alloc(1);
+    /* Value rounded to 16-dp according to Wolfram Alpha */
+    gsl_vector_set_all(expected_y, 0.7744036918870783);
+
+    gsl_vector *y = nn_network_ff(network, x);
+
+    assert_gsl_vector_equal(y, expected_y, EPSILON);
+
+    gsl_vector_free(x);
+    gsl_vector_free(y);
+    gsl_vector_free(expected_y);
+    for (size_t i = 0; i < n - 1; i++) {
+	gsl_vector_free(biases[i]);
+	gsl_matrix_free(weights[i]);
+    }
+    free(biases);
+    free(weights);
+    nn_network_destroy(network);
+
+    (void) state;
+}
